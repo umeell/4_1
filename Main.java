@@ -3,6 +3,8 @@ import java.util.Scanner;
 import java.io.IOException;
 
 class WrongStudentName extends Exception { }
+class WrongAge extends Exception { }
+class WrongDateOfBirth extends Exception { }
 
 class Main {
     public static Scanner scan = new Scanner(System.in);
@@ -21,6 +23,10 @@ class Main {
 
             } catch(WrongStudentName e) {
                 System.out.println("Błędne imie studenta!");
+            } catch(WrongAge e) {
+                System.out.println("Błędny wiek!");
+            } catch(WrongDateOfBirth e) {
+                System.out.println("Błędna data!");
             }
         }
     }
@@ -40,17 +46,31 @@ class Main {
         String name = scan.nextLine();
         if(name.contains(" "))
             throw new WrongStudentName();
-
         return name;
     }
-
-    public static void exercise1() throws IOException, WrongStudentName {
-        var name = ReadName();
+    public static int ReadAge() throws WrongAge {
         System.out.println("Podaj wiek: ");
         var age = scan.nextInt();
+        if(age < 0 || age > 100)
+            throw new WrongAge();
+        return age;
+    }
+    public static String ReadDateOfBirth() throws WrongDateOfBirth {
         scan.nextLine();
         System.out.println("Podaj datę urodzenia DD-MM-YYY");
-        var date = scan.nextLine();
+        String data = scan.nextLine();
+        if(data.charAt(2) == '-' && data.charAt(5) == '-'){
+            return data;
+          }
+      else{
+        throw new WrongDateOfBirth();
+        }
+    }
+  
+    public static void exercise1() throws IOException, WrongAge, WrongStudentName, WrongDateOfBirth {
+        var name = ReadName();
+        var age = ReadAge();
+        var date = ReadDateOfBirth();
         (new Service1()).addStudent(new Student(name, age, date));
     }
 
